@@ -20,21 +20,131 @@ def main_menu(choice=None):
         choice = input(promt)
 
         if choice == "1":
-            show_tasks(tasks)
+            tasks_0 = show_tasks(tasks)
+            for task in tasks_0:
+                print(task)
+
         elif choice == "2":
-            add_task(tasks)
+            while True:
+                title = input("Enter task title:")
+                if title == "":
+                    print("Invalid input try again")
+                    continue
+                else:
+                    break
+
+            while True:
+                priority = input("Choice priority (high/medium/low) h/m/l: ")
+                if priority == "h" or priority == "m" or priority == "l":
+                    break
+                else:
+                    print(priority)
+                    print("Invalid choice try again")
+                    continue
+
+            new_task = add_task(tasks,title,priority)
+            tasks.insert(new_task["id"],new_task)
             save_tasks(tasks)
+            print(f"Task successfully added")
+
         elif choice == "3":
-            update_task(tasks)
+            tasks_0 = show_tasks(tasks)
+            for task in tasks_0:
+                print(task)
+            while True:
+                id = int(input("Write task id: "))
+                for task in tasks:
+                    id_status = 0
+                    if task["id"] == id:
+                        break
+                    elif task["id"] != id:
+                        id_status = None
+
+                if id_status == None:
+                    print("Invalid input")
+                    continue
+                elif id_status != None:
+                    break
+            while True:
+                title = input("Enter task title:")
+                if title == "":
+                    print("Invalid input try again")
+                    continue
+                else:
+                    break
+
+            while True:
+                priority = input("Choice priority (high/medium/low) h/m/l: ")
+                if priority == "h" or priority == "m" or priority == "l":
+                    break
+                else:
+                    print(priority)
+                    print("Invalid choice try again")
+                    continue
+            update_task(tasks,id,title,priority)
             save_tasks(tasks)
         elif choice == "4":
-            delete_task(tasks)
+            tasks_0 = show_tasks(tasks)
+            for task in tasks_0:
+                print(task)
+            while True:
+                id = int(input("Write task id: "))
+                for task in tasks:
+                    id_status = 0
+                    if task["id"] == id:
+                        break
+                    elif task["id"] != id:
+                        id_status = None
+                if id_status == None:
+                    print("Invalid input")
+                    continue
+                elif id_status != None:
+                    break
+            while True:
+                choice = input("Do you really want to delete(y/n):")
+                if choice == "y":
+                    delete_task(tasks, id,choice)
+                    break
+                elif choice == "n":
+                    break
+                else:
+                    print("Invalid input")
+                    continue
+
             save_tasks(tasks)
         elif choice == "5":
-            mark_task(tasks)
+            tasks_0 = show_tasks(tasks)
+            for task in tasks_0:
+                print(task)
+            while True:
+                id = int(input("Write task id: "))
+                for task in tasks:
+                    id_status = 0
+                    if task["id"] == id:
+                        break
+                    elif task["id"] != id:
+                        id_status = None
+                if id_status == None:
+                    print("Invalid input")
+                    continue
+                elif id_status != None:
+                    break
+            while True:
+                choice = input("do you want mark task as completed or not (c/n):")
+                if choice == "c":
+                    break
+                elif choice == "n":
+                    break
+                else:
+                    print("Invalid input")
+                    continue
+            mark_task(tasks,id,choice)
             save_tasks(tasks)
         elif choice == "6":
-            tasks_counter(tasks)
+            counting = tasks_counter(tasks)
+            print(f"Total: {counting["total"]}\n"
+              f"Completed: {counting["completed"]}\n"
+              f"Incompleted: {counting["incompleted"]}")
         elif choice == "7":
             show_incomplete(tasks)
         elif choice == "8":
