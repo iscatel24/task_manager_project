@@ -36,16 +36,19 @@ def show_all_tasks(tasks):
 
 
 def find_task(tasks, id):
-    for task in tasks:
-        id_status = 0
-        if task["id"] != id:
-            id_status = None
-        elif task["id"] == id:
-            cor_task = task
-            return cor_task
-    if id_status == None:
-        status = "Task not founded"
-        return status
+    if tasks:
+        for task in tasks:
+            id_status = 0
+            if task["id"] != id:
+                id_status = None
+            elif task["id"] == id:
+                cor_task = task
+                return cor_task
+        if id_status == None:
+            status = "Task not founded"
+            return status
+    else:
+        return None
 
 
 def update_task(tasks, id, new_title=None, priority=None):
