@@ -111,8 +111,8 @@ class Tasks_manger():
     def delete(self):
         try:
             choice = "y"
-            id = list_box_0.get(list_box_0.curselection())[0]
-            new_list = delete_task(self.tasks,int(id),choice)
+            id = list_box_0.index(list_box_0.curselection())
+            new_list = delete_task(self.tasks,id +1,choice)
             if new_list == None:
                 pass
             elif new_list != None:
@@ -131,13 +131,12 @@ class Tasks_manger():
     def completed(self):
         try:
             self._ = "c"
-            id = list_box_0.get(list_box_0.curselection())[0]
-            self.tasks = mark_task(self.tasks,int(id),self._)
+            id = list_box_0.index(list_box_0.curselection())
+            self.tasks = mark_task(self.tasks,id +1,self._)
             tasks_new = show_all_tasks(self.tasks)
             for _ in range(0,list_box_0.size()) :
-                if list_box_0.get(_)[0] == tasks_new[_][0]:
-                    list_box_0.delete(_)
-                    list_box_0.insert(_,tasks_new[_])
+                list_box_0.delete(_)
+                list_box_0.insert(_,tasks_new[_])
             self.comp = tasks_counter(self.tasks)
             label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
@@ -149,13 +148,12 @@ class Tasks_manger():
     def uncompleted(self):
         try:
             self._ = "n"
-            id = list_box_0.get(list_box_0.curselection())[0]
-            self.tasks = mark_task(self.tasks, int(id), self._)
+            id = list_box_0.index(list_box_0.curselection())
+            self.tasks = mark_task(self.tasks, id + 1, self._)
             tasks_new = show_all_tasks(self.tasks)
             for _ in range(0, list_box_0.size()):
-                if list_box_0.get(_)[0] == tasks_new[_][0]:
-                    list_box_0.delete(_)
-                    list_box_0.insert(_, tasks_new[_])
+                list_box_0.delete(_)
+                list_box_0.insert(_, tasks_new[_])
             self.comp = tasks_counter(self.tasks)
             label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
