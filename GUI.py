@@ -63,7 +63,6 @@ class Tasks_manger():
             choice = "l"
         id = list_box_0.get(list_box_0.curselection())
         id = id.split(".")
-        print(id[0])
         upd = update_task(self.tasks, int(id[0]), entry_0.get(), choice)
         task = f"{upd["id"]}.{"[ ]"} {upd["title"].title()} ({upd["priority"]})"
         list_box_0.insert(upd["id"], task)
