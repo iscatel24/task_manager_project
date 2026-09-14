@@ -38,7 +38,7 @@ def find_task(tasks, id):
     if tasks:
         for task in tasks:
             id_status = 0
-            if task["id"] != id:
+            if task["id"] != int(id):
                 id_status = None
             elif task["id"] == id:
                 cor_task = task

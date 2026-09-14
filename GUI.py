@@ -61,8 +61,10 @@ class Tasks_manger():
             choice = "m"
         elif self.choice.get() == 1:
             choice = "l"
-        id = list_box_0.index(list_box_0.curselection())
-        upd = update_task(self.tasks, id + 1, entry_0.get(), choice)
+        id = list_box_0.get(list_box_0.curselection())
+        id = id.split(".")
+        print(id[0])
+        upd = update_task(self.tasks, int(id[0]), entry_0.get(), choice)
         task = f"{upd["id"]}.{"[ ]"} {upd["title"].title()} ({upd["priority"]})"
         list_box_0.insert(upd["id"], task)
 
@@ -111,8 +113,9 @@ class Tasks_manger():
     def delete(self):
         try:
             choice = "y"
-            id = list_box_0.index(list_box_0.curselection())
-            new_list = delete_task(self.tasks,id +1,choice)
+            id = list_box_0.get(list_box_0.curselection())
+            id = id.split(".")
+            new_list = delete_task(self.tasks,int(id[0]),choice)
             if new_list == None:
                 pass
             elif new_list != None:
@@ -131,8 +134,9 @@ class Tasks_manger():
     def completed(self):
         try:
             self._ = "c"
-            id = list_box_0.index(list_box_0.curselection())
-            self.tasks = mark_task(self.tasks,id +1,self._)
+            id = list_box_0.get(list_box_0.curselection())
+            id = id.split(".")
+            self.tasks = mark_task(self.tasks,int(id[0]),self._)
             tasks_new = show_all_tasks(self.tasks)
             for _ in range(0,list_box_0.size()) :
                 list_box_0.delete(_)
@@ -148,8 +152,9 @@ class Tasks_manger():
     def uncompleted(self):
         try:
             self._ = "n"
-            id = list_box_0.index(list_box_0.curselection())
-            self.tasks = mark_task(self.tasks, id + 1, self._)
+            id = list_box_0.get(list_box_0.curselection())
+            id = id.split(".")
+            self.tasks = mark_task(self.tasks, int(id[0]), self._)
             tasks_new = show_all_tasks(self.tasks)
             for _ in range(0, list_box_0.size()):
                 list_box_0.delete(_)
