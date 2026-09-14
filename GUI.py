@@ -176,8 +176,9 @@ entry_0 = tk.Entry(frame_0, bg="white")
 frame_1 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
 list_box_0 = tk.Listbox(frame_1, width=40)
 l_taks = show_all_tasks(ts.tasks)
-for task in range(0,len(l_taks)):
-    list_box_0.insert(task, l_taks[task])
+if l_taks:
+    for task in range(0,len(l_taks)):
+        list_box_0.insert(task, l_taks[task])
 label_1 = tk.Label(frame_1, text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{int(ts.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
