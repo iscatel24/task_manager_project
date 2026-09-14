@@ -61,8 +61,8 @@ class Tasks_manger():
             choice = "m"
         elif self.choice.get() == 1:
             choice = "l"
-        id = list_box_0.get(list_box_0.curselection())[0]
-        upd = update_task(self.tasks,int(id),entry_0.get(),choice)
+        id = list_box_0.index(list_box_0.curselection())
+        upd = update_task(self.tasks, id + 1, entry_0.get(), choice)
         task = f"{upd["id"]}.{"[ ]"} {upd["title"].title()} ({upd["priority"]})"
         list_box_0.insert(upd["id"], task)
 
@@ -173,12 +173,11 @@ entry_0 = tk.Entry(frame_0, bg="white")
 frame_1 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
 list_box_0 = tk.Listbox(frame_1, width=40)
 l_taks = show_all_tasks(ts.tasks)
-for task in l_taks:
-    list_box_0.insert(task[0], task)
+for task in range(0,len(l_taks)):
+    list_box_0.insert(task, l_taks[task])
 label_1 = tk.Label(frame_1, text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{int(ts.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
-
 
 frame_2 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
 label_2 = tk.Label(frame_2, text=f"", bg="white")

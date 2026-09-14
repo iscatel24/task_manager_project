@@ -31,8 +31,7 @@ def show_all_tasks(tasks):
             new_tasks.insert(task["id"],new_task)
         return new_tasks
     else:
-        status = "No tasks here."
-        return status
+        return None
 
 
 def find_task(tasks, id):

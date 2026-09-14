@@ -21,8 +21,11 @@ if __name__ == "__main__":
 
             if choice == "1":
                 tasks_0 = show_tasks(tasks)
-                for task in tasks_0:
-                    print(task)
+                if tasks_0 == None:
+                    print("No tasks here")
+                else:
+                    for task in tasks_0:
+                        print(task)
 
             elif choice == "2":
                 while True:
