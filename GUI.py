@@ -13,6 +13,7 @@ window.geometry("600x500")
 class Tasks_manger():
     def __init__(self):
         self.tasks = []
+        self.tasks = load_tasks()
         self.choice = tk.IntVar()
         self.frame_3 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
         self.frame_3.grid(row=1, column=2, padx=10, pady=10)
@@ -23,7 +24,7 @@ class Tasks_manger():
         self.radiobt_2 = tk.Radiobutton(self.frame_3, text="High",
                                         value=3, variable=self.choice, bg="white")
         self._ = 0
-        self.comp = 0
+        self.comp = tasks_counter(self.tasks)
 
     def add(self):
         try:
@@ -47,6 +48,7 @@ class Tasks_manger():
                                     f"Tasks completed:{self.comp["completed"]}\n"
                                     f"Tasks uncompleted:{self.comp["incompleted"]} ")
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
+                save_tasks(self.tasks)
         except:
             pass
 
@@ -75,6 +77,7 @@ class Tasks_manger():
         button_2.config(text="Delete", command=self.delete)
         self.choice.set(0)
         entry_0.delete(0, tk.END)
+        save_tasks(self.tasks)
 
     def edit(self):
         try:
@@ -120,6 +123,7 @@ class Tasks_manger():
                                 f"Tasks completed:{int(self.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(self.comp["incompleted"])} ")
             messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
+            save_tasks(self.tasks)
         except:
             messagebox.showerror("error", "You need to select task")
 
@@ -138,6 +142,7 @@ class Tasks_manger():
             label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            save_tasks(self.tasks)
         except :
             messagebox.showerror("error", "You need to select task")
 
@@ -155,6 +160,7 @@ class Tasks_manger():
             label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            save_tasks(self.tasks)
         except :
             messagebox.showerror("error", "You need to select task")
 
@@ -166,9 +172,13 @@ entry_0 = tk.Entry(frame_0, bg="white")
 
 frame_1 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
 list_box_0 = tk.Listbox(frame_1, width=40)
+l_taks = show_all_tasks(ts.tasks)
+for task in l_taks:
+    list_box_0.insert(task[0], task)
 label_1 = tk.Label(frame_1, text=f"Tasks saved:{list_box_0.size()}\n"
-                                     f"Tasks completed: \n"
-                                     f"Tasks uncompleted:{list_box_0.size()}", bg="white")
+                                f"Tasks completed:{int(ts.comp["completed"])}\n"
+                                f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
+
 
 frame_2 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
 label_2 = tk.Label(frame_2, text=f"", bg="white")
