@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+import tkinter.ttk as ttk
+
 
 from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
 , show_incomplete, tasks_counter, show_all_tasks)
@@ -7,7 +9,7 @@ from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, 
 
 window = tk.Tk()
 window.title("Task_manager")
-window.geometry("600x500")
+window.geometry("800x400")
 
 
 class Tasks_manger():
@@ -38,13 +40,13 @@ class Tasks_manger():
                 elif self.choice.get() == 1:
                     choice = "l"
                 new_task = add_task(self.tasks, entry_0.get(), choice)
-                task = f"{new_task["id"]}.{"[ ]"} {new_task["title"].title()} ({new_task["priority"]})"
-                list_box_0.insert(new_task["id"],task)
+                task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
+                tree_0.insert(parent="", index="end", values=task)
                 self.choice.set(0)
                 self.tasks.append(new_task)
                 entry_0.delete(0, tk.END)
                 self.comp = tasks_counter(self.tasks)
-                label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
+                label_1.config(text=f"Tasks saved:{tree_0.size()}\n"
                                     f"Tasks completed:{self.comp["completed"]}\n"
                                     f"Tasks uncompleted:{self.comp["incompleted"]} ")
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
@@ -61,15 +63,14 @@ class Tasks_manger():
             choice = "m"
         elif self.choice.get() == 1:
             choice = "l"
-        id = list_box_0.get(list_box_0.curselection())
-        id = id.split(".")
+        id = tree_0.item(tree_0.selection()[0], "values")
         upd = update_task(self.tasks, int(id[0]), entry_0.get(), choice)
-        task = f"{upd["id"]}.{"[ ]"} {upd["title"].title()} ({upd["priority"]})"
-        list_box_0.insert(upd["id"], task)
+        task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[ ]"
+        tree_0.insert(parent="", index=upd["id"], values=task)
 
-        list_box_0.delete(list_box_0.index(list_box_0.curselection()))
+        tree_0.delete(tree_0.selection()[0])
         self.comp = tasks_counter(self.tasks)
-        label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
+        label_1.config(text=f"Tasks saved:{tree_0.size()}\n"
                             f"Tasks completed:{self.comp["completed"]}\n"
                             f"Tasks uncompleted:{self.comp["incompleted"]} ")
         button_3.pack(before=button_0)
@@ -82,25 +83,25 @@ class Tasks_manger():
 
     def edit(self):
         try:
-            edit = list_box_0.index(list_box_0.curselection())
-            self._ = edit
-            entry_0.insert(list_box_0.index(list_box_0.curselection()),
-                           string=self.tasks[edit]["title"])
-            if self.tasks[edit]["priority"] == "low":
+            task_index = tree_0.index(tree_0.selection()[0])
+            self._ = task_index
+            id = tree_0.item(tree_0.selection()[0], "values")
+            entry_0.insert(self._,string=self.tasks[tree_0.index(tree_0.selection()[0])]["title"])
+            if self.tasks[task_index]["priority"] == "low":
                 self.radiobt_0.invoke()
-            elif self.tasks[edit]["priority"] == "medium":
+            elif self.tasks[task_index]["priority"] == "medium":
                 self.radiobt_1.invoke()
-            elif self.tasks[edit]["priority"] == "high":
+            elif self.tasks[task_index]["priority"] == "high":
                 self.radiobt_2.invoke()
             button_3.pack_forget()
             button_4.pack_forget()
             button_0.config(text="Update", command=self.update)
             button_2.config(text="Cancel", command=self.cancel)
-        except:
+        except FileNotFoundError:
             messagebox.showerror("error", "You need to select task")
 
     def cancel(self):
-        list_box_0.select_clear(self._)
+        tree_0.selection_remove(tree_0.selection()[0])
         button_3.pack(before=button_0)
         button_4.pack(after=button_3)
         button_0.config(text="Add", command=self.add)
@@ -112,16 +113,16 @@ class Tasks_manger():
     def delete(self):
         try:
             choice = "y"
-            id = list_box_0.get(list_box_0.curselection())
+            id = tree_0.get(tree_0.curselection())
             id = id.split(".")
             new_list = delete_task(self.tasks,int(id[0]),choice)
             if new_list == None:
                 pass
             elif new_list != None:
                 self.tasks = new_list
-            list_box_0.delete(list_box_0.index(list_box_0.curselection()))
+            tree_0.delete(tree_0.index(tree_0.curselection()))
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
+            label_1.config(text=f"Tasks saved:{tree_0.size()}\n"
                                 f"Tasks completed:{int(self.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(self.comp["incompleted"])} ")
             messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
@@ -133,15 +134,15 @@ class Tasks_manger():
     def completed(self):
         try:
             self._ = "c"
-            id = list_box_0.get(list_box_0.curselection())
+            id = tree_0.get(tree_0.curselection())
             id = id.split(".")
             self.tasks = mark_task(self.tasks,int(id[0]),self._)
             tasks_new = show_all_tasks(self.tasks)
-            for _ in range(0,list_box_0.size()) :
-                list_box_0.delete(_)
-                list_box_0.insert(_,tasks_new[_])
+            for _ in range(0,tree_0.size()) :
+                tree_0.delete(_)
+                tree_0.insert(_,tasks_new[_])
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
+            label_1.config(text=f"Tasks saved:{tree_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
@@ -151,15 +152,15 @@ class Tasks_manger():
     def uncompleted(self):
         try:
             self._ = "n"
-            id = list_box_0.get(list_box_0.curselection())
+            id = tree_0.get(tree_0.curselection())
             id = id.split(".")
             self.tasks = mark_task(self.tasks, int(id[0]), self._)
             tasks_new = show_all_tasks(self.tasks)
-            for _ in range(0, list_box_0.size()):
-                list_box_0.delete(_)
-                list_box_0.insert(_, tasks_new[_])
+            for _ in range(0, tree_0.size()):
+                tree_0.delete(_)
+                tree_0.insert(_, tasks_new[_])
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{list_box_0.size()}\n"
+            label_1.config(text=f"Tasks saved:{tree_0.size()}\n"
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
@@ -173,12 +174,32 @@ label_0 = tk.Label(frame_0, text="Write your task and choice priority.", bg="whi
 entry_0 = tk.Entry(frame_0, bg="white")
 
 frame_1 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
-list_box_0 = tk.Listbox(frame_1, width=40)
-l_taks = show_all_tasks(ts.tasks)
+columns = "ID","TASK","PRIORITY","STATUS"
+tree_0 = ttk.Treeview(frame_1,columns=columns,show="headings",)
+tree_0.heading("ID",text="ID")
+tree_0.heading("TASK",text="TASK")
+tree_0.heading("PRIORITY",text="PRIORITY")
+tree_0.heading("STATUS",text="STATUS")
+tree_0.column("ID",width=30)
+tree_0.column("TASK",width=300)
+tree_0.column("PRIORITY",width=60)
+tree_0.column("STATUS",width=50)
+
+
+
+
+
+l_taks = load_tasks()
 if l_taks:
-    for task in range(0,len(l_taks)):
-        list_box_0.insert(task, l_taks[task])
-label_1 = tk.Label(frame_1, text=f"Tasks saved:{list_box_0.size()}\n"
+    for task in l_taks:
+        stat = ""
+        if task["completed"]:
+            stat += "X"
+        elif task["completed"] == False:
+            stat += " "
+        new_task = f"{task["id"]}",f"{task["title"].title()}",f"{task["priority"]}",f"[{stat}]"
+        tree_0.insert(parent="",index="end", values=new_task)
+label_1 = tk.Label(frame_1, text=f"Tasks saved:{tree_0.size()}\n"
                                 f"Tasks completed:{int(ts.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
 
@@ -193,7 +214,7 @@ button_4 = tk.Button(frame_2, text="Uncompleted", width=15, relief=tk.RIDGE,comm
 
 
 frame_1.grid(row=0, column=0, rowspan=2, pady=10, sticky="nw")
-list_box_0.pack()
+tree_0.pack()
 label_1.pack(padx=3)
 frame_0.grid(row=0, column=1, padx=10, pady=10, sticky="n")
 label_0.pack(pady=2)

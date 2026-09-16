@@ -44,8 +44,7 @@ def find_task(tasks, id):
                 cor_task = task
                 return cor_task
         if id_status == None:
-            status = "Task not founded"
-            return status
+            return None
     else:
         return None
 
@@ -112,16 +111,20 @@ def save_tasks(tasks):
 
 def load_tasks():
     tasks = []
-    with open("tasks") as file:
-        for line in file:
-            line = line.strip()
-            parts = line.split("|")
-            task_id = int(parts[0])
-            title = parts[1]
-            completed = parts[2] == "True"
-            piority = parts[3]
-            task = {"id": task_id, "title": title, "completed": completed, "priority": piority, }
-            tasks.append(task)
+    try:
+        with open("tasks") as file:
+            for line in file:
+                line = line.strip()
+                parts = line.split("|")
+                task_id = int(parts[0])
+                title = parts[1]
+                completed = parts[2] == "True"
+                piority = parts[3]
+                task = {"id": task_id, "title": title, "completed": completed, "priority": piority, }
+                tasks.append(task)
+    except FileNotFoundError:
+        with open("tasks", "w") as file:
+            pass
     return tasks
 
 
@@ -155,5 +158,5 @@ def tasks_counter(tasks):
     else:
         completed = 0
         incompleted = 0
-        counting = {"completed": completed, "incompleted": incompleted}
+        counting = {"completed": completed, "incompleted": incompleted, "total": len(tasks)}
         return counting
