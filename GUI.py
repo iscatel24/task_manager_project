@@ -1,8 +1,6 @@
-
 import tkinter as tk
-from tkinter import messagebox
 import tkinter.ttk as ttk
-
+from tkinter import messagebox
 
 from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
 , show_incomplete, tasks_counter, show_all_tasks)
@@ -40,18 +38,21 @@ class Tasks_manger():
                 choice = "m"
             elif self.choice.get() == 1:
                 choice = "l"
-            new_task = add_task(self.tasks, entry_0.get(), choice)
-            task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
-            tree_0.insert(parent="", index="end", values=task)
-            self.choice.set(0)
-            self.tasks.append(new_task)
-            self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                f"Tasks completed:{self.comp["completed"]}\n"
-                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
-            entry_0.delete(0, tk.END)
-            messagebox.showinfo(title="✅", message="Tasks successfully added")
-            save_tasks(self.tasks)
+            if entry_0.get() == "":
+                messagebox.showerror("error", "You need write task")
+            else:
+                new_task = add_task(self.tasks, entry_0.get(), choice)
+                task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
+                tree_0.insert(parent="", index="end", values=task)
+                self.choice.set(0)
+                self.tasks.append(new_task)
+                self.comp = tasks_counter(self.tasks)
+                label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
+                                    f"Tasks completed:{self.comp["completed"]}\n"
+                                    f"Tasks uncompleted:{self.comp["incompleted"]} ")
+                entry_0.delete(0, tk.END)
+                messagebox.showinfo(title="✅", message="Tasks successfully added")
+                save_tasks(self.tasks)
         except:
             if entry_0.get() == "" or self.choice.get() == 0:
                 messagebox.showerror("error", "You need write task or choice priority")
