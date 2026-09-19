@@ -1,17 +1,37 @@
-
-
 def add_task(tasks):
-    title = input("Enter task title:")
-    max_id = 0
-    for task in tasks:
-        if task["id"] > max_id:
-            max_id = task["id"]
-    new_task = {"id": max_id+1,
-                "title": title,
-                "completed": False,
-                }
+    while True:
+        title = input("Enter task title:")
+        if title == "":
+            print("Invalid input try again")
+            continue
+
+        else:
+            max_id = 0
+            for task in tasks:
+                if task["id"] > max_id:
+                    max_id = task["id"]
+            new_task = {"id": max_id+1,
+                        "title": title,
+                        "completed": False,
+                        }
+            break
+    while True:
+        priority = input("Choice priority (high/medium/low) h/m/l: ")
+        if priority == "h":
+            new_task["priority"] = "high"
+            break
+        elif priority == "m":
+            new_task["priority"] = "medium"
+            break
+        elif priority == "l":
+            new_task["priority"] = "low"
+            break
+        else:
+            print("Invalid choice try again")
+            continue
     tasks.append(new_task)
     print(f"Task successfully added")
+
 
 def show_all_tasks(tasks):
     if tasks:
@@ -21,7 +41,7 @@ def show_all_tasks(tasks):
                     stat += "X"
                 elif task["completed"] == False:
                     stat += " "
-                print(f"{task["id"]}. [{stat}] {task["title"].title()}")
+                print(f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})")
     else:
         print("No tasks here.")
 
@@ -45,9 +65,32 @@ def update_task(tasks,id=None):
     id = int(input("Write task id: "))
     cor_task = find_task(tasks,id)
     if cor_task in tasks:
-        new_title = input("Write new title: ")
-        cor_task["title"] = new_title
-        print(f"Task successfully updated")
+        choice = input("What do you want update (priority/name) p/n:")
+        if choice == "n":
+            new_title = input("Write new title: ")
+            cor_task["title"] = new_title
+            print(f"Task successfully updated")
+        elif choice == "p":
+            while True:
+                priority = input("Choice priority (high/medium/low) h/m/l: ")
+                if priority == "h":
+                    cor_task["priority"] = "high"
+                    print(f"Task successfully updated")
+                    break
+                elif priority == "m":
+                    cor_task["priority"] = "medium"
+                    print(f"Task successfully updated")
+                    break
+                elif priority == "l":
+                    cor_task["priority"] = "low"
+                    print(f"Task successfully updated")
+                    break
+                elif priority != "l" or  "m" or "h":
+                    print("Invalid choice try again")
+                    continue
+        else:
+            print("invalid input")
+
 
 def delete_task(tasks):
     show_all_tasks(tasks)
@@ -82,7 +125,7 @@ def mark_task(tasks):
 def save_tasks(tasks):
     with open("tasks","w") as file:
         for task in tasks:
-            file.write(f"{task["id"]}|{task["title"]}|{task["completed"]}\n")
+            file.write(f"{task["id"]}|{task["title"]}|{task["completed"]}|{task["priority"]}\n")
 
 
 def load_tasks():
@@ -94,41 +137,82 @@ def load_tasks():
             task_id = int(parts[0])
             title = parts[1]
             completed = parts[2] == "True"
-            task = {"id": task_id, "title": title, "completed": completed,}
+            piority = parts[3]
+            task = {"id": task_id, "title": title, "completed": completed,"priority": piority, }
             tasks.append(task)
     return tasks
 
+def show_incomplete(tasks):
+    if tasks:
+        completed = False
+        for task in tasks:
+                if task["completed"]:
+                    completed = True
+                    stat = ""
+                    if task["completed"]:
+                        stat += "X"
+                    print(f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})")
+        if completed == False:
+            print("No completed tasks here")
+    else:
+        print("No tasks here.")
+
+def tasks_counter(tasks):
+    if tasks:
+        completed = 0
+        incompleted = 0
+        for task in tasks:
+            if task["completed"] == True:
+                completed += 1
+            elif task["completed"] == False:
+                incompleted += 1
+        print(f"Total: {len(tasks)}\n"
+              f"Completed: {completed}\n"
+              f"Incompleted: {incompleted}")
+    else:
+        print("Tasks not founded")
 
 
+def main_menu(choice=None):
+    tasks = load_tasks()
+    while True:
+        promt = (f"\n=== DAILY TASK MANAGER ===\n\n"
+                 f"1. Show all tasks\n"
+                 f"2. Add task\n"
+                 f"3. Update task\n"
+                 f"4. Delete task\n"
+                 f"5. Mark task\n"
+                 f"6. Count tasks\n"
+                 f"7. Incompleted tasks\n"
+                 f"8. Exite\n\n"
+                 f"Choose an option: ")
 
-# def load_tasks(tasks=None):
-#     with open("tasks") as file:
-#         tks = []
-#         id = []
-#         ts = ""
-#         count_1 = 0
-#         for task in file:
-#             for p in task:
-#                 if p != "|":
-#                   ts += p
-#                 elif p == "|":
-#                     id.append(ts)
-#                     ts = ""
-#                     continue
-#             count_1 += 1
-#         for task in range(len(file)):
-#             pr = {}
-#             id_2 = id.pop(0)
-#             pr["id"] = int(id_2[0])
-#             id_2 = id.pop(0)
-#             pr["title"] = id_2
-#             id_2 = id.pop(0)
-#             if id_2 == "True":
-#                 pr["completed"] = True
-#             elif id_2 == "False":
-#                 pr["completed"] = False
-#             tks.append(pr)
-#         print(tks)
+        choice = input(promt)
+
+        if choice == "1":
+            show_all_tasks(tasks)
+        elif choice == "2":
+            add_task(tasks)
+            save_tasks(tasks)
+        elif choice == "3":
+            update_task(tasks)
+            save_tasks(tasks)
+        elif choice == "4":
+            delete_task(tasks)
+            save_tasks(tasks)
+        elif choice == "5":
+            mark_task(tasks)
+            save_tasks(tasks)
+        elif choice == "6":
+            tasks_counter(tasks)
+        elif choice == "7":
+            show_incomplete(tasks)
+        elif choice == "8":
+            print(f"Have a good day")
+            save_tasks(tasks)
+            exit()
+        else:
+            print(f"Invalid input please try again. ")
 
 
-
+main_menu()
