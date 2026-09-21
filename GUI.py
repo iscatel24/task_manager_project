@@ -39,7 +39,7 @@ class Tasks_manger():
             elif self.choice.get() == 1:
                 choice = "l"
             if entry_0.get() == "":
-                messagebox.showerror("error", "You need write task")
+                messagebox.showerror("error", "You need write task or choice priority")
             else:
                 new_task = add_task(self.tasks, entry_0.get(), choice)
                 task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
@@ -53,9 +53,9 @@ class Tasks_manger():
                 entry_0.delete(0, tk.END)
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
                 save_tasks(self.tasks)
+                print(self.tasks)
         except:
-            if entry_0.get() == "" or self.choice.get() == 0:
-                messagebox.showerror("error", "You need write task or choice priority")
+            messagebox.showerror("error", "You need choice priority")
 
 
     def update(self):

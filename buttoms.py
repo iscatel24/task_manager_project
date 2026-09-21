@@ -50,39 +50,39 @@ def find_task(tasks, id):
 
 
 def update_task(tasks, id, new_title=None, priority=None):
-    #show_all_tasks(tasks)
-    id = id
-    task = find_task(tasks, id)
-    new_title = new_title
-    task["title"] = new_title
-    priority = priority
-    if priority == "h":
-        task["priority"] = "high"
-    elif priority == "m":
-        task["priority"] = "medium"
-    elif priority == "l":
-        task["priority"] = "low"
+    if tasks:
+        id = id
+        task = find_task(tasks, id)
+        if task == None:
+            return None
+        new_title = new_title
+        task["title"] = new_title
+        priority = priority
+        if priority == "h":
+            task["priority"] = "high"
+        elif priority == "m":
+            task["priority"] = "medium"
+        elif priority == "l":
+            task["priority"] = "low"
+        else:
+            return None
+        return task
     else:
-        status="invalid input"
-        return status
-    return task
+        return None
 
 
 def delete_task(tasks, id, choice=None):
-    #show_all_tasks(tasks)
     id = id
     cor_task = find_task(tasks, id)
     if cor_task in tasks:
         choice = choice
         if choice == "y":
             tasks.remove(cor_task)
-            status = "Task successfully removed"
             return tasks
         elif choice == "n":
             return None
         else:
-            status = "Invalid input"
-            return status
+            return None
 
 
 def mark_task(tasks, id, action):
