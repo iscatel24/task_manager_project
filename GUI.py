@@ -147,6 +147,7 @@ class Tasks_manger():
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
+            tree_0.selection_remove(tree_0.selection()[0])
         except:
             messagebox.showerror("error", "You need to select task")
 
@@ -166,7 +167,8 @@ class Tasks_manger():
                                 f"Tasks completed:{self.comp["completed"]}\n"
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
-        except False:
+            tree_0.selection_remove(tree_0.selection()[0])
+        except:
             messagebox.showerror("error", "You need to select task")
 
 
