@@ -80,7 +80,7 @@ class Tasks_manger():
             task_index = tree_0.index(tree_0.selection()[0])
             self._ = task_index
             self.start_new()
-        except ValueError:
+        except :
             messagebox.showerror("error", "You need to select task")
 
     def cancel(self):
@@ -91,9 +91,9 @@ class Tasks_manger():
 
     def delete(self):
         try:
-            if messagebox.askokcancel(title="Delete 🗑️",message="Are you sure ?",icon="question"):
-                choice = "y"
-                id = tree_0.item(tree_0.selection()[0], "values")
+            choice = "y"
+            id = tree_0.item(tree_0.selection()[0], "values")
+            if messagebox.askokcancel(title="Delete 🗑️", message="Are you sure ?", icon="question"):
                 new_list = delete_task(self.tasks,int(id[0]),choice)
                 if new_list == None:
                     pass
