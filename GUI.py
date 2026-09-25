@@ -23,6 +23,7 @@ class Tasks_manger():
         self.frame_3 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
         self.frame_3.grid(row=1, column=2, padx=10, pady=10)
         self._ = 0
+        self._0 = 0
         self.comp = tasks_counter(self.tasks)
         self.top1 = 0
         self.entry_1 = 0
@@ -30,6 +31,8 @@ class Tasks_manger():
 
     def add(self):
         try:
+            if entry_0.get() == "" or self.choice.get() == 0 or "|" in entry_0.get() or "\n" in entry_0.get():
+                raise ValueError
             if self.choice.get() == "High":
                 choice = "h"
             elif self.choice.get() == "Medium":
@@ -52,35 +55,57 @@ class Tasks_manger():
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
                 save_tasks(self.tasks)
         except:
-            messagebox.showerror("error", "You need choice priority")
-
+            if entry_0.get() == "" or self.choice.get() == 0 :
+                messagebox.showerror("error", "You need write a task")
+            elif "|" in entry_0.get():
+                messagebox.showerror("error", "You can't use | in task")
+            elif "\n" in entry_0.get():
+                messagebox.showerror("error", "You can't use \n in task")
 
     def update(self):
-        if self.entry_1.get() == "" or self.choice_0.get() == 0:
-            messagebox.showerror("error", "You need write task or choice priority")
-        if self.choice_0.get() == "High":
-            choice = "h"
-        elif self.choice_0.get() == "Medium":
-            choice = "m"
-        elif self.choice_0.get() == "Low":
-            choice = "l"
-        id = tree_0.item(tree_0.selection()[0], "values")
-        upd = update_task(self.tasks, int(id[0]), self.entry_1.get(),choice)
-        task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[ ]"
-        tree_0.item(tree_0.selection()[0], values=task)
-        self.comp = tasks_counter(self.tasks)
-        label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                            f"Tasks completed:{self.comp["completed"]}\n"
-                            f"Tasks uncompleted:{self.comp["incompleted"]} ")
-        self.top1.destroy()
-        save_tasks(self.tasks)
+        try:
+            if self.entry_1.get() == "" or self.choice_0.get() == 0 or "|" in self.entry_1.get() or "\n" in self.entry_1.get():
+                raise ValueError
+            if self.choice_0.get() == "High":
+                choice = "h"
+            elif self.choice_0.get() == "Medium":
+                choice = "m"
+            elif self.choice_0.get() == "Low":
+                choice = "l"
+            id = tree_0.item(self._0,"values")
+            upd = update_task(self.tasks, int(id[0]), self.entry_1.get(),choice)
+            stat = ""
+            if upd["completed"]:
+                stat += "X"
+            elif upd["completed"] == False:
+                stat += " "
+            task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[{stat}]"
+            tree_0.item(self._0, values=task)
+            self.comp = tasks_counter(self.tasks)
+            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
+                                f"Tasks completed:{self.comp["completed"]}\n"
+                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            save_tasks(self.tasks)
+
+            self.top1.destroy()
+        except:
+            if self.entry_1.get() == "" or self.choice_0.get() == 0 :
+                messagebox.showerror("error", "You need write a task")
+            elif "|" in self.entry_1.get():
+                messagebox.showerror("error", "You can't use | in task")
+            elif "\n" in self.entry_1.get():
+                messagebox.showerror("error", "You can't use \n in task")
+
+
+
+
 
     def edit(self):
         try:
-            task_index = tree_0.index(tree_0.selection()[0])
-            self._ = task_index
+            self._ = tree_0.index(tree_0.selection()[0])
+            self._0 = tree_0.selection()[0]
             self.start_new()
-        except :
+        except ValueError:
             messagebox.showerror("error", "You need to select task")
 
     def cancel(self):
@@ -97,6 +122,7 @@ class Tasks_manger():
                 new_list = delete_task(self.tasks,int(id[0]),choice)
                 if new_list == None:
                     pass
+                    raise ValueError
                 elif new_list != None:
                     self.tasks = new_list
                 tree_0.delete(tree_0.selection()[0])
@@ -104,8 +130,8 @@ class Tasks_manger():
                 label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
                                     f"Tasks completed:{int(self.comp["completed"])}\n"
                                     f"Tasks uncompleted:{int(self.comp["incompleted"])} ")
-                messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
                 save_tasks(self.tasks)
+                messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
         except:
             messagebox.showerror("error", "You need to select task")
 
