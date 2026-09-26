@@ -18,25 +18,21 @@ class Tasks_manger():
             self.tasks = load_tasks()
         except ValueError:
             messagebox.showerror("Error", "File is damaged you need to fix it or delete file")
-        self.choice = tk.IntVar()
+        self.choice = tk.StringVar()
         self.frame_3 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
         self.frame_3.grid(row=1, column=2, padx=10, pady=10)
-        self.radiobt_0 = tk.Radiobutton(self.frame_3, text="Low",
-                                        value=1, variable=self.choice, bg="white")
-        self.radiobt_1 = tk.Radiobutton(self.frame_3, text="Medium",
-                                        value=2, variable=self.choice, bg="white")
-        self.radiobt_2 = tk.Radiobutton(self.frame_3, text="High",
-                                        value=3, variable=self.choice, bg="white")
         self._ = 0
         self.comp = tasks_counter(self.tasks)
 
     def add(self):
         try:
-            if self.choice.get() == 3:
+            if entry_0.get() == "" or self.choice.get() == 0 or "|" in entry_0.get() or "\n" in entry_0.get():
+                raise ValueError
+            if self.choice.get() == "High":
                 choice = "h"
-            elif self.choice.get() == 2:
+            elif self.choice.get() == "Medium":
                 choice = "m"
-            elif self.choice.get() == 1:
+            elif self.choice.get() == "Low":
                 choice = "l"
             if entry_0.get() == "":
                 messagebox.showerror("error", "You need write task or choice priority")
@@ -44,44 +40,56 @@ class Tasks_manger():
                 new_task = add_task(self.tasks, entry_0.get(), choice)
                 task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
                 tree_0.insert(parent="", index="end", values=task)
-                self.choice.set(0)
+                self.choice.set("Medium")
                 self.tasks.append(new_task)
                 self.comp = tasks_counter(self.tasks)
                 label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
                                     f"Tasks completed:{self.comp["completed"]}\n"
                                     f"Tasks uncompleted:{self.comp["incompleted"]} ")
                 entry_0.delete(0, tk.END)
-                messagebox.showinfo(title="✅", message="Tasks successfully added")
                 save_tasks(self.tasks)
-                print(self.tasks)
+                messagebox.showinfo(title="✅", message="Tasks successfully added")
         except:
-            messagebox.showerror("error", "You need choice priority")
-
+            if entry_0.get() == "" or self.choice.get() == 0:
+                messagebox.showerror("error", "You need choice priority")
+            elif "|" in entry_0.get():
+                messagebox.showerror("error", "You can't use | in task")
+            elif "\n" in entry_0.get():
+                messagebox.showerror("error", "You can't use \n in task")
 
     def update(self):
-        if entry_0.get() == "" or self.choice.get() == 0:
-            messagebox.showerror("error", "You need write task or choice priority")
-        if self.choice.get() == 3:
-            choice = "h"
-        elif self.choice.get() == 2:
-            choice = "m"
-        elif self.choice.get() == 1:
-            choice = "l"
-        id = tree_0.item(tree_0.selection()[0], "values")
-        upd = update_task(self.tasks, int(id[0]), entry_0.get(), choice)
-        task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[ ]"
-        tree_0.item(tree_0.selection()[0], values=task)
-        self.comp = tasks_counter(self.tasks)
-        label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                            f"Tasks completed:{self.comp["completed"]}\n"
-                            f"Tasks uncompleted:{self.comp["incompleted"]} ")
-        button_3.pack(before=button_0)
-        button_4.pack(after=button_3)
-        button_0.config(text="Add", command=self.add)
-        button_2.config(text="Delete", command=self.delete)
-        self.choice.set(0)
-        entry_0.delete(0, tk.END)
-        save_tasks(self.tasks)
+        try:
+            if entry_0.get() == "" or self.choice.get() == 0 or "|" in entry_0.get() or "\n" in entry_0.get():
+                raise ValueError
+            if self.choice.get() == "High":
+                choice = "h"
+            elif self.choice.get() == "Medium":
+                choice = "m"
+            elif self.choice.get() == "Low":
+                choice = "l"
+            id = tree_0.item(tree_0.selection()[0], "values")
+            upd = update_task(self.tasks, int(id[0]), entry_0.get(),choice)
+            task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[ ]"
+            tree_0.item(tree_0.selection()[0], values=task)
+            self.comp = tasks_counter(self.tasks)
+            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
+                                f"Tasks completed:{self.comp["completed"]}\n"
+                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            button_3.pack(before=button_0)
+            button_4.pack(after=button_3)
+            button_0.config(text="Add", command=self.add)
+            button_2.config(text="Delete", command=self.delete)
+            self.choice.set("Medium")
+            entry_0.delete(0, tk.END)
+            save_tasks(self.tasks)
+        except:
+            if entry_0.get() == "" or self.choice.get() == 0:
+                messagebox.showerror("error", "You need choice priority")
+            elif "|" in entry_0.get():
+                messagebox.showerror("error", "You can't use | in task")
+            elif "\n" in entry_0.get():
+                messagebox.showerror("error", "You can't use \n in task")
+
 
     def edit(self):
         try:
@@ -89,11 +97,11 @@ class Tasks_manger():
             self._ = task_index
             entry_0.insert(self._,string=self.tasks[self._]["title"])
             if self.tasks[task_index]["priority"] == "low":
-                self.radiobt_0.invoke()
+                combo_box_0.current(2)
             elif self.tasks[task_index]["priority"] == "medium":
-                self.radiobt_1.invoke()
+                combo_box_0.current(1)
             elif self.tasks[task_index]["priority"] == "high":
-                self.radiobt_2.invoke()
+                combo_box_0.current(0)
             button_3.pack_forget()
             button_4.pack_forget()
             button_0.config(text="Update", command=self.update)
@@ -109,7 +117,7 @@ class Tasks_manger():
         button_2.config(text="Delete", command=self.delete)
         entry_0.delete(0, tk.END)
         self._ = 0
-        self.choice.set(0)
+        self.choice.set("Medium")
 
     def delete(self):
         try:
@@ -125,8 +133,8 @@ class Tasks_manger():
             label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
                                 f"Tasks completed:{int(self.comp["completed"])}\n"
                                 f"Tasks uncompleted:{int(self.comp["incompleted"])} ")
-            messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
             save_tasks(self.tasks)
+            messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
         except:
             messagebox.showerror("error", "You need to select task")
 
@@ -210,12 +218,18 @@ label_1 = tk.Label(frame_1, text=f"Tasks saved:{len(tree_0.get_children())}\n"
                                 f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
 
 frame_2 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
-label_2 = tk.Label(frame_2, text=f"", bg="white")
 button_0 = tk.Button(frame_2, text="Add", width=15, relief=tk.RIDGE,command=ts.add )
 button_1 = tk.Button(frame_2, text="Edit", width=15, relief=tk.RIDGE,command=ts.edit )
 button_2 = tk.Button(frame_2, text="Delete", width=15, relief=tk.RIDGE,command=ts.delete )
 button_3 = tk.Button(frame_2, text="Complete", width=15, relief=tk.RIDGE,command=ts.completed)
 button_4 = tk.Button(frame_2, text="Uncompleted", width=15, relief=tk.RIDGE,command=ts.uncompleted)
+
+label_2 = tk.Label(ts.frame_3, text=f"Priority", bg="white")
+
+combo_box_0 = ttk.Combobox(ts.frame_3,textvariable=ts.choice,state="readonly")
+combo_box_0["values"] = ("High",
+                         "Medium",
+                         "Low")
 
 
 
@@ -227,14 +241,13 @@ frame_0.grid(row=0, column=1, padx=10, pady=10, sticky="n")
 label_0.pack(pady=2)
 entry_0.pack()
 frame_2.grid(row=1, column=1, padx=10, pady=10)
-# label_2.pack()
 button_3.pack(pady=2)
 button_4.pack(pady=2, after=button_3)
 button_0.pack(pady=2)
 button_1.pack(pady=2)
 button_2.pack(pady=2)
-ts.radiobt_0.pack()
-ts.radiobt_1.pack()
-ts.radiobt_2.pack()
+label_2.pack()
+combo_box_0.pack()
+combo_box_0.current(1)
 
 window.mainloop()
