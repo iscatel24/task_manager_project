@@ -114,7 +114,7 @@ def load_tasks():
                 parts = line.split("|")
                 task_id = int(parts[0])
                 title = parts[1]
-                completed = parts[2] == "True"
+                completed = parts[2] == "False"
                 piority = parts[3]
                 task = {"id": task_id, "title": title, "completed": completed, "priority": piority, }
                 tasks.append(task)
