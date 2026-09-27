@@ -1,10 +1,6 @@
 def add_task(tasks, name, priority):
     title = name
-    max_id = 0
-    for task in tasks:
-        if task["id"] > max_id:
-            max_id = task["id"]
-    new_task = {"id": max_id + 1,
+    new_task = {"id": len(tasks) + 1,
                 "title": title,
                 "completed": False,
                 }
