@@ -148,7 +148,7 @@ def tasks_counter(tasks):
             if task["completed"] == True:
                 completed += 1
             elif task["completed"] == False:
-                incompleted += 1
+                completed += 1
         counting = {"completed": completed,"incompleted": incompleted,"total": len(tasks)}
         return counting
     else:
