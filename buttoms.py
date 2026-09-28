@@ -128,8 +128,9 @@ def load_tasks():
     return tasks
 
 
-def show_incomplete(tasks):
+def show_complete(tasks):
     if tasks:
+        m_tasks = []
         completed = False
         for task in tasks:
             if task["completed"]:
@@ -137,11 +138,33 @@ def show_incomplete(tasks):
                 stat = ""
                 if task["completed"]:
                     stat += "X"
-                print(f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})")
+                m_tasks.append({"id": task["id"], "completed": stat,
+                                "title": task["title"].title(), "priority": task["priority"]})
+                f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})"
         if completed == False:
-            print("No completed tasks here")
+            return None
+        return m_tasks
     else:
-        print("No tasks here.")
+        return None
+
+def show_incomplete(tasks):
+    if tasks:
+        m_tasks = []
+        completed = True
+        for task in tasks:
+            if task["completed"] == False:
+                completed = False
+                stat = ""
+                if task["completed"]:
+                    stat += "X"
+                m_tasks.append({"id": task["id"], "completed": stat,
+                                "title": task["title"].title(), "priority": task["priority"]})
+                f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})"
+        if completed == True:
+            return None
+        return m_tasks
+    else:
+        return None
 
 
 def tasks_counter(tasks):

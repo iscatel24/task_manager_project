@@ -1,6 +1,6 @@
 from buttoms import show_all_tasks as show_tasks
 from buttoms import (update_task,delete_task,add_task,mark_task,save_tasks,load_tasks
-,show_incomplete,tasks_counter)
+,show_complete,tasks_counter)
 
 if __name__ == "__main__":
     def main_menu(choice=None):
@@ -13,7 +13,7 @@ if __name__ == "__main__":
                      f"4. Delete task\n"
                      f"5. Mark task\n"
                      f"6. Count tasks\n"
-                     f"7. Incompleted tasks\n"
+                     f"7. Completed tasks\n"
                      f"8. Exite\n\n"
                      f"Choose an option: ")
 
@@ -158,7 +158,12 @@ if __name__ == "__main__":
                   f"Completed: {counting["completed"]}\n"
                   f"Incompleted: {counting["incompleted"]}")
             elif choice == "7":
-                show_incomplete(tasks)
+                tasks = show_complete(tasks)
+                if tasks == None:
+                    print("There is no completed tasks")
+                elif tasks != None:
+                    for task in tasks:
+                        print(f"{task["id"]}. [{task["completed"]}] {task["title"].title()} ({task["priority"]})")
             elif choice == "8":
                 print(f"Have a good day")
                 save_tasks(tasks)
