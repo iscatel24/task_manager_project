@@ -8,7 +8,7 @@ from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, 
 
 window = tk.Tk()
 window.title("Task_manager")
-window.geometry("800x400")
+window.geometry("850x400")
 
 
 class Tasks_manger():
