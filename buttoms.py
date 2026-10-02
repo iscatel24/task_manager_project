@@ -1,6 +1,14 @@
 def add_task(tasks, name, priority):
     title = name
-    new_task = {"id": len(tasks) + 1,
+    id = 1
+    # for _ in range(len(tasks)):
+    #     if tasks[_]["id"] != _+1:
+    #         id = _ + 1
+    #         break
+    for task in tasks:
+        if task["id"] >= id:
+            id = task["id"] + 1
+    new_task = {"id": id,
                 "title": title,
                 "completed": False,
                 }
@@ -114,7 +122,7 @@ def load_tasks():
                 parts = line.split("|")
                 task_id = int(parts[0])
                 title = parts[1]
-                completed = parts[2] == "False"
+                completed = parts[2] == "True"
                 piority = parts[3]
                 task = {"id": task_id, "title": title, "completed": completed, "priority": piority, }
                 tasks.append(task)
@@ -148,7 +156,7 @@ def tasks_counter(tasks):
             if task["completed"] == True:
                 completed += 1
             elif task["completed"] == False:
-                completed += 1
+                incompleted += 1
         counting = {"completed": completed,"incompleted": incompleted,"total": len(tasks)}
         return counting
     else:

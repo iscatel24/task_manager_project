@@ -54,7 +54,7 @@ class Tasks_manger():
                 entry_0.delete(0, tk.END)
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
                 save_tasks(self.tasks)
-        except:
+        except :
             if entry_0.get() == "" or self.choice.get() == 0 :
                 messagebox.showerror("error", "You need write a task")
             elif "|" in entry_0.get():
@@ -243,7 +243,7 @@ l_taks = load_tasks()
 if l_taks:
     for task in l_taks:
         stat = ""
-        if task["completed"]:
+        if task["completed"] == True:
             stat += "X"
         elif task["completed"] == False:
             stat += " "
