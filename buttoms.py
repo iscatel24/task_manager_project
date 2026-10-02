@@ -100,8 +100,7 @@ def mark_task(tasks, id, action):
             #status = "Task is not completed"
             return tasks
         else:
-            status = "Invalid input"
-            return status
+            return None
 
 def save_tasks(tasks):
     with open("tasks", "w") as file:
@@ -140,7 +139,6 @@ def show_complete(tasks):
                     stat += "X"
                 m_tasks.append({"id": task["id"], "completed": stat,
                                 "title": task["title"].title(), "priority": task["priority"]})
-                f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})"
         if completed == False:
             return None
         return m_tasks
