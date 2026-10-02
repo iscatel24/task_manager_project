@@ -55,6 +55,10 @@ class Tasks_manger():
                                     f"Tasks completed:{self.comp["completed"]}\n"
                                     f"Tasks uncompleted:{self.comp["incompleted"]} ")
                 entry_0.delete(0, tk.END)
+                if self.filter.get() == 1:
+                    self.filter_complete()
+                elif self.filter.get() == 2:
+                    self.filter_uncomplete()
                 messagebox.showinfo(title="✅", message="Tasks successfully added")
                 save_tasks(self.tasks)
         except:
@@ -157,7 +161,13 @@ class Tasks_manger():
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
             tree_0.selection_remove(tree_0.selection()[0])
+            if self.filter.get() == 1:
+                self.filter_complete()
+            elif self.filter.get()== 2:
+                self.filter_uncomplete()
             messagebox.showinfo(title="☑️", message="Task is completed ")
+
+
         except:
             messagebox.showerror("error", "You need to select task")
 
@@ -178,6 +188,10 @@ class Tasks_manger():
                                 f"Tasks uncompleted:{self.comp["incompleted"]} ")
             save_tasks(self.tasks)
             tree_0.selection_remove(tree_0.selection()[0])
+            if self.filter.get() == 1:
+                self.filter_complete()
+            elif self.filter.get() == 2:
+                self.filter_uncomplete()
             messagebox.showinfo(title="❌", message="Task is uncompleted ")
         except:
             messagebox.showerror("error", "You need to select task")
@@ -185,34 +199,42 @@ class Tasks_manger():
     def filter_complete(self):
         try:
             i = show_complete(ts.tasks)
-            if i == None:
-                raise ValueError
             id_completed = []
-            for task in i:
-                id_completed.append(task["id"])
-            for item in self.filter_id:
-                if int(tree_0.item(item, "values")[0]) not in id_completed:
-                    tree_0.detach(item)
-                else:
-                    tree_0.move(item, "", "end")
+            if i == None:
+                for item in self.filter_id:
+                    if int(tree_0.item(item, "values")[0]) not in id_completed:
+                        tree_0.detach(item)
+                raise ValueError
+            else:
+                for task in i:
+                    id_completed.append(task["id"])
+                for item in self.filter_id:
+                    if int(tree_0.item(item, "values")[0]) not in id_completed:
+                        tree_0.detach(item)
+                    else:
+                        tree_0.move(item, "", "end")
         except ValueError:
             messagebox.showerror("error", "There is not completed tasks")
 
     def filter_uncomplete(self):
         try:
             i = show_incomplete(ts.tasks)
-            if i == None:
-                raise ValueError
             id_incompleted = []
-            for task in i:
-                id_incompleted.append(task["id"])
-            for item in self.filter_id:
-                if int(tree_0.item(item, "values")[0]) not in id_incompleted:
-                    tree_0.detach(item)
-                else:
-                    tree_0.move(item,"","end")
+            if i == None:
+                for item in self.filter_id:
+                    if int(tree_0.item(item, "values")[0]) not in id_incompleted:
+                        tree_0.detach(item)
+                raise ValueError
+            else:
+                for task in i:
+                    id_incompleted.append(task["id"])
+                for item in self.filter_id:
+                    if int(tree_0.item(item, "values")[0]) not in id_incompleted:
+                        tree_0.detach(item)
+                    else:
+                        tree_0.move(item,"","end")
         except ValueError:
-            messagebox.showerror("error", "There is not completed tasks")
+            messagebox.showerror("error", "There is not uncompleted tasks")
 
     def reset_filter(self):
         if self.filter.get() != 0:

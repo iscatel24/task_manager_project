@@ -158,12 +158,13 @@ if __name__ == "__main__":
                   f"Completed: {counting["completed"]}\n"
                   f"Incompleted: {counting["incompleted"]}")
             elif choice == "7":
-                tasks = show_complete(tasks)
-                if tasks == None:
+                completed_tasks = show_complete(tasks)
+                if completed_tasks == None:
                     print("There is no completed tasks")
-                elif tasks != None:
-                    for task in tasks:
-                        print(f"{task["id"]}. [{task["completed"]}] {task["title"].title()} ({task["priority"]})")
+                elif completed_tasks != None:
+                    for task in completed_tasks:
+                        print(f"{task["id"]}. [{task["completed"]}] "
+                              f"{task["title"].title()} ({task["priority"]})")
             elif choice == "8":
                 print(f"Have a good day")
                 save_tasks(tasks)
