@@ -1,6 +1,6 @@
 import unittest
 
-from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
+from buttoms_for_test import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
 , show_complete, tasks_counter, show_all_tasks,find_task,show_incomplete)
 
 
@@ -106,3 +106,11 @@ class Test_buttoms(unittest.TestCase):
         tasks_n_empty_True = [{'id': 1, 'title': 'gdfg', 'completed': True, 'priority': 'medium'}]
         self.assertEqual(tasks_counter(tasks_n_empty),{"completed": 0, "incompleted": 1, "total": 1})
         self.assertEqual(tasks_counter(tasks_n_empty_True), {"completed": 1, "incompleted": 0, "total": 1})
+
+    def test_loadtasks_empty(self):
+        empty_tasks = []
+        self.assertIsNone(load_tasks(empty_tasks))
+
+    def test_loadtasks_notempty(self):
+        tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
+        self.assertEqual(tasks_counter(tasks_n_empty), {"completed": 0, "incompleted": 1, "total": 1})
