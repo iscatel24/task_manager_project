@@ -1,6 +1,9 @@
 import unittest
+import os
+from pathlib import Path
+from unittest.mock import mock_open
 
-from buttoms_for_test import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
+from first_project_daily_task_manager.buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
 , show_complete, tasks_counter, show_all_tasks,find_task,show_incomplete)
 
 
@@ -70,11 +73,13 @@ class Test_buttoms(unittest.TestCase):
 
     def test_savetasks_empty(self):
         empty_tasks = []
-        self.assertIsNone(save_tasks(empty_tasks))
+        fake_file = Path(__file__).resolve().parent / "tasks"
+        self.assertIsNone(save_tasks(empty_tasks,fake_file))
 
     def test_savetasks_notempty(self):
-        tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
-        self.assertIsNone(save_tasks(tasks_n_empty))
+        tasks_n_empty = [{'id': 1, 'title': 'gdfg1', 'completed': False, 'priority': 'medium'}]
+        fake_file = Path(__file__).resolve().parent / "tasks"
+        self.assertIsNone(save_tasks(tasks_n_empty,fake_file))
 
     def test_showcompleted_empty(self):
         empty_tasks = []
@@ -109,8 +114,11 @@ class Test_buttoms(unittest.TestCase):
 
     def test_loadtasks_empty(self):
         empty_tasks = []
-        self.assertIsNone(load_tasks(empty_tasks))
+        fake_file = Path(__file__).resolve().parent / "tasks_for_loadtest_empty"
+        self.assertEqual(load_tasks(fake_file),empty_tasks)
 
     def test_loadtasks_notempty(self):
         tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
-        self.assertEqual(tasks_counter(tasks_n_empty), {"completed": 0, "incompleted": 1, "total": 1})
+        fake_file = Path(__file__).resolve().parent / "tasks_for_loadtest_notempty"
+        self.assertEqual(load_tasks(fake_file), tasks_n_empty)
+
