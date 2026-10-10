@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def add_task(tasks, name, priority):
     title = name
     max_id = 0
@@ -100,19 +103,23 @@ def mark_task(tasks, id, action):
             #status = "Task is not completed"
             return tasks
         else:
-            status = "Invalid input"
-            return status
+            return None
 
-def save_tasks(tasks):
-    with open("tasks", "w") as file:
+
+def save_tasks(tasks,file=None):
+    if file is None:
+        file = Path(__file__).resolve().parent / "tasks"
+    with open(file, "w") as file:
         for task in tasks:
             file.write(f"{task["id"]}|{task["title"]}|{task["completed"]}|{task["priority"]}\n")
 
 
-def load_tasks():
+def load_tasks(file=None):
+    if file is None:
+        file = Path(__file__).resolve().parent / "tasks"
     tasks = []
     try:
-        with open("tasks") as file:
+        with open(file) as file:
             for line in file:
                 line = line.strip()
                 parts = line.split("|")
@@ -140,7 +147,6 @@ def show_complete(tasks):
                     stat += "X"
                 m_tasks.append({"id": task["id"], "completed": stat,
                                 "title": task["title"].title(), "priority": task["priority"]})
-                f"{task["id"]}. [{stat}] {task["title"].title()} ({task["priority"]})"
         if completed == False:
             return None
         return m_tasks
