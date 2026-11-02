@@ -3,13 +3,13 @@ import os
 from pathlib import Path
 from unittest.mock import mock_open
 
-from first_project_daily_task_manager.buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
-, show_complete, tasks_counter, show_all_tasks,find_task,show_incomplete)
+from buttons import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
+, show_completed, tasks_counter, show_all_tasks,find_task,show_incomplete)
 
 
 
 
-class Test_buttoms(unittest.TestCase):
+class TestButtons(unittest.TestCase):
     def test_add_empty(self):
         empty_tasks = []
         self.assertEqual(add_task(empty_tasks,"123","l"),{'id': 1, 'title': '123', 'completed': False, 'priority': 'low'})
@@ -83,20 +83,20 @@ class Test_buttoms(unittest.TestCase):
 
     def test_showcompleted_empty(self):
         empty_tasks = []
-        self.assertIsNone(show_complete(empty_tasks))
+        self.assertIsNone(show_completed(empty_tasks))
 
     def test_showcompleted_notempty(self):
         tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
         tasks_n_empty_True = [{'id': 1, 'title': 'gdfg', 'completed': True, 'priority': 'medium'}]
-        self.assertIsNone(show_complete(tasks_n_empty))
-        self.assertEqual(show_complete(tasks_n_empty_True),[{"id": 1, "completed": "X","title": 'Gdfg', "priority": 'medium'}])
+        self.assertIsNone(show_completed(tasks_n_empty))
+        self.assertEqual(show_completed(tasks_n_empty_True),[{"id": 1, "completed": "X","title": 'Gdfg', "priority": 'medium'}])
 
 
-    def test_showincompleted_empty(self):
+    def test_showincomplete_empty(self):
         empty_tasks = []
         self.assertIsNone(show_incomplete(empty_tasks))
 
-    def test_showincompleted_notempty(self):
+    def test_showincomplete_notempty(self):
         tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
         tasks_n_empty_True = [{'id': 1, 'title': 'gdfg', 'completed': True, 'priority': 'medium'}]
         self.assertEqual(show_incomplete(tasks_n_empty),[{"id": 1, "completed": "","title": 'Gdfg', "priority": 'medium'}])
@@ -104,13 +104,13 @@ class Test_buttoms(unittest.TestCase):
 
     def test_counting_empty(self):
         empty_tasks = []
-        self.assertEqual(tasks_counter(empty_tasks),{"completed": 0, "incompleted": 0, "total": 0})
+        self.assertEqual(tasks_counter(empty_tasks),{"completed": 0, "incomplete": 0, "total": 0})
 
     def test_counting_notempty(self):
         tasks_n_empty = [{'id': 1, 'title': 'gdfg', 'completed': False, 'priority': 'medium'}]
         tasks_n_empty_True = [{'id': 1, 'title': 'gdfg', 'completed': True, 'priority': 'medium'}]
-        self.assertEqual(tasks_counter(tasks_n_empty),{"completed": 0, "incompleted": 1, "total": 1})
-        self.assertEqual(tasks_counter(tasks_n_empty_True), {"completed": 1, "incompleted": 0, "total": 1})
+        self.assertEqual(tasks_counter(tasks_n_empty),{"completed": 0, "incomplete": 1, "total": 1})
+        self.assertEqual(tasks_counter(tasks_n_empty_True), {"completed": 1, "incomplete": 0, "total": 1})
 
     def test_loadtasks_empty(self):
         empty_tasks = []

@@ -92,15 +92,12 @@ def mark_task(tasks, id, action):
     id = id
     cor_task = find_task(tasks, id)
     if cor_task in tasks:
-        # mark task as completed or not completed
         action = action
         if action == "c":
             cor_task["completed"] = True
-            #status = "Task completed"
             return tasks
         elif action == "n":
             cor_task["completed"] = False
-            #status = "Task is not completed"
             return tasks
         else:
             return None
@@ -126,8 +123,8 @@ def load_tasks(file=None):
                 task_id = int(parts[0])
                 title = parts[1]
                 completed = parts[2] == "True"
-                piority = parts[3]
-                task = {"id": task_id, "title": title, "completed": completed, "priority": piority, }
+                priority = parts[3]
+                task = {"id": task_id, "title": title, "completed": completed, "priority": priority, }
                 tasks.append(task)
     except FileNotFoundError:
         with open("tasks", "w") as file:
@@ -135,7 +132,7 @@ def load_tasks(file=None):
     return tasks
 
 
-def show_complete(tasks):
+def show_completed(tasks):
     if tasks:
         m_tasks = []
         completed = False
@@ -176,16 +173,16 @@ def show_incomplete(tasks):
 def tasks_counter(tasks):
     if tasks:
         completed = 0
-        incompleted = 0
+        incomplete = 0
         for task in tasks:
             if task["completed"] == True:
                 completed += 1
             elif task["completed"] == False:
-                incompleted += 1
-        counting = {"completed": completed,"incompleted": incompleted,"total": len(tasks)}
+                incomplete += 1
+        counting = {"completed": completed,"incomplete": incomplete,"total": len(tasks)}
         return counting
     else:
         completed = 0
-        incompleted = 0
-        counting = {"completed": completed, "incompleted": incompleted, "total": len(tasks)}
+        incomplete = 0
+        counting = {"completed": completed, "incomplete": incomplete, "total": len(tasks)}
         return counting

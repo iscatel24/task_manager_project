@@ -1,12 +1,12 @@
-from buttoms import show_all_tasks as show_tasks
-from buttoms import (update_task,delete_task,add_task,mark_task,save_tasks,load_tasks
-,show_complete,tasks_counter)
+from buttons import show_all_tasks as show_tasks
+from buttons import (update_task,delete_task,add_task,mark_task,save_tasks,load_tasks
+,show_completed,tasks_counter)
 
 if __name__ == "__main__":
     def main_menu(choice=None):
         tasks = load_tasks()
         while True:
-            promt = (f"\n=== DAILY TASK MANAGER ===\n\n"
+            prompt = (f"\n=== DAILY TASK MANAGER ===\n\n"
                      f"1. Show all tasks\n"
                      f"2. Add task\n"
                      f"3. Update task\n"
@@ -14,35 +14,35 @@ if __name__ == "__main__":
                      f"5. Mark task\n"
                      f"6. Count tasks\n"
                      f"7. Completed tasks\n"
-                     f"8. Exite\n\n"
+                     f"8. Exit\n\n"
                      f"Choose an option: ")
 
-            choice = input(promt)
+            choice = input(prompt)
 
             if choice == "1":
                 tasks_0 = show_tasks(tasks)
                 if tasks_0 == None:
-                    print("No tasks here")
+                    print("No tasks found.")
                 else:
                     for task in tasks_0:
                         print(task)
 
             elif choice == "2":
                 while True:
-                    title = input("Enter task title:")
+                    title = input("Enter a task title: ")
                     if title == "":
-                        print("Invalid input try again")
+                        print("Invalid input. Please try again.")
                         continue
                     else:
                         break
 
                 while True:
-                    priority = input("Choice priority (high/medium/low) h/m/l: ")
+                    priority = input("Choose a priority (high/medium/low) h/m/l: ")
                     if priority == "h" or priority == "m" or priority == "l":
                         break
                     else:
                         print(priority)
-                        print("Invalid choice try again")
+                        print("Invalid choice. Please try again.")
                         continue
 
                 new_task = add_task(tasks,title,priority)
@@ -53,12 +53,12 @@ if __name__ == "__main__":
             elif choice == "3":
                 tasks_0 = show_tasks(tasks)
                 if tasks_0 == None:
-                    print("No tasks here")
+                    print("No tasks found.")
                 else:
                     for task in tasks_0:
                         print(task)
                     while True:
-                        id = int(input("Write task id: "))
+                        id = int(input("Enter the task ID: "))
                         for task in tasks:
                             id_status = 0
                             if task["id"] == id:
@@ -72,32 +72,32 @@ if __name__ == "__main__":
                         elif id_status != None:
                             break
                     while True:
-                        title = input("Enter task title:")
+                        title = input("Enter a task title: ")
                         if title == "":
-                            print("Invalid input try again")
+                            print("Invalid input. Please try again.")
                             continue
                         else:
                             break
 
                     while True:
-                        priority = input("Choice priority (high/medium/low) h/m/l: ")
+                        priority = input("Choose a priority (high/medium/low) h/m/l: ")
                         if priority == "h" or priority == "m" or priority == "l":
                             break
                         else:
                             print(priority)
-                            print("Invalid choice try again")
+                            print("Invalid choice. Please try again.")
                             continue
                     update_task(tasks,id,title,priority)
                     save_tasks(tasks)
             elif choice == "4":
                 tasks_0 = show_tasks(tasks)
                 if tasks_0 == None:
-                    print("No tasks here")
+                    print("No tasks found.")
                 else:
                     for task in tasks_0:
                         print(task)
                     while True:
-                        id = int(input("Write task id: "))
+                        id = int(input("Enter the task ID: "))
                         for task in tasks:
                             id_status = 0
                             if task["id"] == id:
@@ -110,7 +110,7 @@ if __name__ == "__main__":
                         elif id_status != None:
                             break
                     while True:
-                        choice = input("Do you really want to delete(y/n):")
+                        choice = input("Delete the selected task (y/n): ")
                         if choice == "y":
                             delete_task(tasks, id,choice)
                             break
@@ -124,12 +124,12 @@ if __name__ == "__main__":
             elif choice == "5":
                 tasks_0 = show_tasks(tasks)
                 if tasks_0 == None:
-                    print("No tasks here")
+                    print("No tasks found.")
                 else:
                     for task in tasks_0:
                         print(task)
                     while True:
-                        id = int(input("Write task id: "))
+                        id = int(input("Enter the task ID: "))
                         for task in tasks:
                             id_status = 0
                             if task["id"] == id:
@@ -142,7 +142,7 @@ if __name__ == "__main__":
                         elif id_status != None:
                             break
                     while True:
-                        choice = input("do you want mark task as completed or not (c/n):")
+                        choice = input("Mark the task as completed or incomplete (c/n): ")
                         if choice == "c":
                             break
                         elif choice == "n":
@@ -156,11 +156,11 @@ if __name__ == "__main__":
                 counting = tasks_counter(tasks)
                 print(f"Total: {counting["total"]}\n"
                   f"Completed: {counting["completed"]}\n"
-                  f"Incompleted: {counting["incompleted"]}")
+                  f"Incomplete: {counting["incomplete"]}")
             elif choice == "7":
-                completed_tasks = show_complete(tasks)
+                completed_tasks = show_completed(tasks)
                 if completed_tasks == None:
-                    print("There is no completed tasks")
+                    print("No completed tasks found.")
                 elif completed_tasks != None:
                     for task in completed_tasks:
                         print(f"{task["id"]}. [{task["completed"]}] "
@@ -170,7 +170,7 @@ if __name__ == "__main__":
                 save_tasks(tasks)
                 exit()
             else:
-                print(f"Invalid input please try again. ")
+                print(f"Invalid input. Please try again.")
 
 
     main_menu()

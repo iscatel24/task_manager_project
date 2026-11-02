@@ -2,22 +2,22 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import messagebox
 
-from buttoms import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
-, show_complete, tasks_counter, show_all_tasks,show_incomplete)
+from buttons import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
+, show_completed, tasks_counter, show_all_tasks,show_incomplete)
 
 
 window = tk.Tk()
-window.title("Task_manager")
+window.title("Task Manager")
 window.geometry("850x400")
 
 
-class Tasks_manger():
+class TaskManager():
     def __init__(self):
         self.tasks = []
         try:
             self.tasks = load_tasks()
         except ValueError:
-            messagebox.showerror("Error", "File is damaged you need to fix it or delete file")
+            messagebox.showerror("Error", "The tasks file is damaged. Repair it or restore a backup.")
         self.choice = tk.StringVar()
         self.choice_0 = tk.StringVar()
         self.filter_id = []
@@ -42,7 +42,7 @@ class Tasks_manger():
             elif self.choice.get() == "Low":
                 choice = "l"
             if entry_0.get() == "":
-                messagebox.showerror("error", "You need write task or choice priority")
+                messagebox.showerror("Error", "Enter a task and choose a priority.")
             else:
                 new_task = add_task(self.tasks, entry_0.get(), choice)
                 task = f"{new_task["id"]}", f"{new_task["title"].title()}", f"{new_task["priority"]}", f"[ ]"
@@ -51,23 +51,23 @@ class Tasks_manger():
                 self.choice.set("Medium")
                 self.tasks.append(new_task)
                 self.comp = tasks_counter(self.tasks)
-                label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                    f"Tasks completed:{self.comp["completed"]}\n"
-                                    f"Tasks uncompleted:{self.comp["incompleted"]} ")
+                label_1.config(text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                    f"Completed tasks: {self.comp["completed"]}\n"
+                                    f"Incomplete tasks: {self.comp["incomplete"]} ")
                 entry_0.delete(0, tk.END)
                 if self.filter.get() == 1:
                     self.filter_complete()
                 elif self.filter.get() == 2:
-                    self.filter_uncomplete()
-                messagebox.showinfo(title="✅", message="Tasks successfully added")
+                    self.filter_incomplete()
+                messagebox.showinfo(title="Task added", message="Task added successfully.")
                 save_tasks(self.tasks)
         except:
             if entry_0.get() == "" or self.choice.get() == 0 :
-                messagebox.showerror("error", "You need write a task")
+                messagebox.showerror("Error", "Enter a task.")
             elif "|" in entry_0.get():
-                messagebox.showerror("error", "You can't use | in task")
+                messagebox.showerror("Error", "Task titles cannot contain |.")
             elif "\n" in entry_0.get():
-                messagebox.showerror("error", "You can't use \n in task")
+                messagebox.showerror("Error", "Task titles cannot contain line breaks.")
 
     def update(self):
         try:
@@ -89,19 +89,19 @@ class Tasks_manger():
             task = f"{upd["id"]}", f"{upd["title"].title()}", f"{upd["priority"]}", f"[{stat}]"
             tree_0.item(self._0, values=task)
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                f"Tasks completed:{self.comp["completed"]}\n"
-                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            label_1.config(text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                f"Completed tasks: {self.comp["completed"]}\n"
+                                f"Incomplete tasks: {self.comp["incomplete"]} ")
             save_tasks(self.tasks)
 
             self.top1.destroy()
         except:
             if self.entry_1.get() == "" or self.choice_0.get() == 0 :
-                messagebox.showerror("error", "You need write a task")
+                messagebox.showerror("Error", "Enter a task.")
             elif "|" in self.entry_1.get():
-                messagebox.showerror("error", "You can't use | in task")
+                messagebox.showerror("Error", "Task titles cannot contain |.")
             elif "\n" in self.entry_1.get():
-                messagebox.showerror("error", "You can't use \n in task")
+                messagebox.showerror("Error", "Task titles cannot contain line breaks.")
 
 
 
@@ -113,7 +113,7 @@ class Tasks_manger():
             self._0 = tree_0.selection()[0]
             self.start_new()
         except ValueError:
-            messagebox.showerror("error", "You need to select task")
+            messagebox.showerror("Error", "Select a task first.")
 
     def cancel(self):
         tree_0.selection_remove(tree_0.selection()[0])
@@ -125,7 +125,7 @@ class Tasks_manger():
         try:
             choice = "y"
             id = tree_0.item(tree_0.selection()[0], "values")
-            if messagebox.askokcancel(title="Delete 🗑️", message="Are you sure ?", icon="question"):
+            if messagebox.askokcancel(title="Delete task", message="Delete the selected task?", icon="question"):
                 new_list = delete_task(self.tasks,int(id[0]),choice)
                 if new_list == None:
                     pass
@@ -135,13 +135,13 @@ class Tasks_manger():
                 self.filter_id.remove(tree_0.selection()[0])
                 tree_0.delete(tree_0.selection()[0])
                 self.comp = tasks_counter(self.tasks)
-                label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                    f"Tasks completed:{int(self.comp["completed"])}\n"
-                                    f"Tasks uncompleted:{int(self.comp["incompleted"])} ")
+                label_1.config(text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                    f"Completed tasks: {int(self.comp["completed"])}\n"
+                                    f"Incomplete tasks: {int(self.comp["incomplete"])} ")
                 save_tasks(self.tasks)
-                messagebox.showinfo(title="🗑️", message="Tasks successfully deleted ")
+                messagebox.showinfo(title="Task deleted", message="Task deleted successfully.")
         except:
-            messagebox.showerror("error", "You need to select task")
+            messagebox.showerror("Error", "Select a task first.")
 
 
     def completed(self):
@@ -156,22 +156,22 @@ class Tasks_manger():
             object_0[3] = "[X]"
             tree_0.item(tree_0.selection()[0],values=object_0)
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                f"Tasks completed:{self.comp["completed"]}\n"
-                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            label_1.config(text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                f"Completed tasks: {self.comp["completed"]}\n"
+                                f"Incomplete tasks: {self.comp["incomplete"]} ")
             save_tasks(self.tasks)
             tree_0.selection_remove(tree_0.selection()[0])
             if self.filter.get() == 1:
                 self.filter_complete()
             elif self.filter.get()== 2:
-                self.filter_uncomplete()
-            messagebox.showinfo(title="☑️", message="Task is completed ")
+                self.filter_incomplete()
+            messagebox.showinfo(title="Task completed", message="Task marked as completed.")
 
 
         except:
-            messagebox.showerror("error", "You need to select task")
+            messagebox.showerror("Error", "Select a task first.")
 
-    def uncompleted(self):
+    def incomplete(self):
         try:
             self._ = "n"
             object_0 = []
@@ -183,22 +183,22 @@ class Tasks_manger():
             object_0[3] = "[ ]"
             tree_0.item(tree_0.selection()[0], values=object_0)
             self.comp = tasks_counter(self.tasks)
-            label_1.config(text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                f"Tasks completed:{self.comp["completed"]}\n"
-                                f"Tasks uncompleted:{self.comp["incompleted"]} ")
+            label_1.config(text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                f"Completed tasks: {self.comp["completed"]}\n"
+                                f"Incomplete tasks: {self.comp["incomplete"]} ")
             save_tasks(self.tasks)
             tree_0.selection_remove(tree_0.selection()[0])
             if self.filter.get() == 1:
                 self.filter_complete()
             elif self.filter.get() == 2:
-                self.filter_uncomplete()
-            messagebox.showinfo(title="❌", message="Task is uncompleted ")
+                self.filter_incomplete()
+            messagebox.showinfo(title="Task incomplete", message="Task marked as incomplete.")
         except:
-            messagebox.showerror("error", "You need to select task")
+            messagebox.showerror("Error", "Select a task first.")
 
     def filter_complete(self):
         try:
-            i = show_complete(ts.tasks)
+            i = show_completed(ts.tasks)
             id_completed = []
             if i == None:
                 for item in self.filter_id:
@@ -214,27 +214,27 @@ class Tasks_manger():
                     else:
                         tree_0.move(item, "", "end")
         except ValueError:
-            messagebox.showerror("error", "There is not completed tasks")
+            messagebox.showerror("Error", "No completed tasks found.")
 
-    def filter_uncomplete(self):
+    def filter_incomplete(self):
         try:
             i = show_incomplete(ts.tasks)
-            id_incompleted = []
+            id_incomplete = []
             if i == None:
                 for item in self.filter_id:
-                    if int(tree_0.item(item, "values")[0]) not in id_incompleted:
+                    if int(tree_0.item(item, "values")[0]) not in id_incomplete:
                         tree_0.detach(item)
                 raise ValueError
             else:
                 for task in i:
-                    id_incompleted.append(task["id"])
+                    id_incomplete.append(task["id"])
                 for item in self.filter_id:
-                    if int(tree_0.item(item, "values")[0]) not in id_incompleted:
+                    if int(tree_0.item(item, "values")[0]) not in id_incomplete:
                         tree_0.detach(item)
                     else:
                         tree_0.move(item,"","end")
         except ValueError:
-            messagebox.showerror("error", "There is not uncompleted tasks")
+            messagebox.showerror("Error", "No incomplete tasks found.")
 
     def reset_filter(self):
         if self.filter.get() != 0:
@@ -269,11 +269,11 @@ class Tasks_manger():
         elif self.tasks[self._]["priority"] == "high":
             combo_box_1.current(0)
 
-        label_3 = tk.Label(frame_3, text="Write new task and choice priority")
+        label_3 = tk.Label(frame_3, text="Edit the task and choose a priority.")
 
-        button_5 = tk.Button(frame_5, text="save", command=self.update)
+        button_5 = tk.Button(frame_5, text="Save", command=self.update)
 
-        button_6 = tk.Button(frame_5, text="cancel", command=self.cancel)
+        button_6 = tk.Button(frame_5, text="Cancel", command=self.cancel)
 
         frame_3.grid(row=1, column=1, padx=10, pady=10)
         label_3.pack()
@@ -285,10 +285,10 @@ class Tasks_manger():
         button_6.pack(side="left", padx=2)
 
 
-ts = Tasks_manger()
+ts = TaskManager()
 
 frame_0 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
-label_0 = tk.Label(frame_0, text="Write your task and choice priority.", bg="white")
+label_0 = tk.Label(frame_0, text="Enter a task and choose a priority.", bg="white")
 entry_0 = tk.Entry(frame_0, bg="white")
 
 frame_1 = tk.Frame(window, bd=4, bg="white", relief=tk.RIDGE)
@@ -308,9 +308,9 @@ scrollbar_0.config(command=tree_0.yview)
 
 
 
-l_taks = load_tasks()
-if l_taks:
-    for task in l_taks:
+loaded_tasks = load_tasks()
+if loaded_tasks:
+    for task in loaded_tasks:
         stat = ""
         if task["completed"]:
             stat += "X"
@@ -319,12 +319,12 @@ if l_taks:
         new_task = f"{task["id"]}",f"{task["title"].title()}",f"{task["priority"]}",f"[{stat}]"
         id = tree_0.insert(parent="",index=task["id"], values=new_task)
         ts.filter_id.append(id)
-label_1 = tk.Label(frame_1, text=f"Tasks saved:{len(tree_0.get_children())}\n"
-                                f"Tasks completed:{int(ts.comp["completed"])}\n"
-                                f"Tasks uncompleted:{int(ts.comp["incompleted"])}", bg="white")
-radio_button_0 = tk.Radiobutton(frame_1, text="Complete", width=15, relief=tk.RIDGE,command=ts.filter_complete,
+label_1 = tk.Label(frame_1, text=f"Total tasks: {len(tree_0.get_children())}\n"
+                                f"Completed tasks: {int(ts.comp["completed"])}\n"
+                                f"Incomplete tasks: {int(ts.comp["incomplete"])}", bg="white")
+radio_button_0 = tk.Radiobutton(frame_1, text="Completed", width=15, relief=tk.RIDGE,command=ts.filter_complete,
                                 variable=ts.filter,value=1,bg="white")
-radio_button_1 = tk.Radiobutton(frame_1, text="Uncomplete", width=15, relief=tk.RIDGE,command=ts.filter_uncomplete,
+radio_button_1 = tk.Radiobutton(frame_1, text="Incomplete", width=15, relief=tk.RIDGE,command=ts.filter_incomplete,
                                 variable=ts.filter,value=2,bg="white")
 button_5 = tk.Button(frame_1, text="Reset filter", width=15, relief=tk.RIDGE,command=ts.reset_filter)
 
@@ -334,7 +334,7 @@ button_0 = tk.Button(frame_2, text="Add", width=15, relief=tk.RIDGE,command=ts.a
 button_1 = tk.Button(frame_2, text="Edit", width=15, relief=tk.RIDGE,command=ts.edit )
 button_2 = tk.Button(frame_2, text="Delete", width=15, relief=tk.RIDGE,command=ts.delete )
 button_3 = tk.Button(frame_2, text="Complete", width=15, relief=tk.RIDGE,command=ts.completed)
-button_4 = tk.Button(frame_2, text="Uncompleted", width=15, relief=tk.RIDGE,command=ts.uncompleted)
+button_4 = tk.Button(frame_2, text="Incomplete", width=15, relief=tk.RIDGE,command=ts.incomplete)
 
 
 label_2 = tk.Label(ts.frame_3, text=f"Priority", bg="white")
