@@ -3,10 +3,6 @@ from pathlib import Path
 directory = Path.home() / "TaskManager"
 directory.mkdir(exist_ok=True)
 
-directory = Path.cwd().resolve()
-
-directory = str(directory.parents[1]/ "buttons.py")
-print(directory)
 
 
 
