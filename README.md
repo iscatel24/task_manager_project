@@ -67,3 +67,37 @@ python3 -m unittest discover -s buttons_tests -p 'test_*.py' -v
 ```
 
 `GUI.py` and `main_menu.py` are the desktop and terminal entry points.
+
+## Create an .exe File
+
+Use Python 3.12 or newer (tested with Python 3.15.2).
+
+Run the following commands from the project folder:
+
+```sh
+# Create a virtual environment
+py -3.13 -m venv .venv
+
+# Install PyInstaller
+.venv\Scripts\python.exe -m pip install pyinstaller
+
+# Build the application
+.venv\Scripts\python.exe -m PyInstaller --onedir --windowed --name TaskManager GUI.py
+```
+
+### Running the Application
+
+After running these commands, PyInstaller will create three items in your project folder:
+
+- `build/` 
+- `dist/` 
+- `TaskManager.spec` 
+
+To run the application:
+
+1. Open the `dist` folder.
+2. Find the `TaskManager` folder inside it.
+3. Copy the entire `TaskManager` folder to your Desktop.
+4. Open the folder and run `TaskManager.exe`.
+
+**Important:** Do not copy only `TaskManager.exe`.The executable requires the other files and folders included in the `TaskManager` directory.

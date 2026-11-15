@@ -1,9 +1,17 @@
 import unittest
 import os
+import sys
 from pathlib import Path
 from unittest.mock import mock_open
 
-from buttons import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
+directory = Path(__file__).resolve().parents[2]
+
+
+if str(directory) not in sys.path:
+    sys.path.append(str(directory))
+
+
+from task_manager_project.buttons import (update_task, delete_task, add_task, mark_task, save_tasks, load_tasks
 , show_completed, tasks_counter, show_all_tasks,find_task,show_incomplete)
 
 
