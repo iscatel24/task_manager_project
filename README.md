@@ -99,5 +99,6 @@ To run the application:
 2. Find the `TaskManager` folder inside it.
 3. Copy the entire `TaskManager` folder to your Desktop.
 4. Open the folder and run `TaskManager.exe`.
-
+5. Your tasks are automatically saved in C:\Users\<YourUsername>\TaskManager
+   
 **Important:** Do not copy only `TaskManager.exe`.The executable requires the other files and folders included in the `TaskManager` directory.
