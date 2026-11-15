@@ -1,5 +1,14 @@
 from pathlib import Path
 
+directory = Path.home() / "TaskManager"
+directory.mkdir(exist_ok=True)
+
+directory = Path.cwd().resolve()
+
+directory = str(directory.parents[1]/ "buttons.py")
+print(directory)
+
+
 
 def add_task(tasks, name, priority):
     title = name
@@ -105,7 +114,7 @@ def mark_task(tasks, id, action):
 
 def save_tasks(tasks,file=None):
     if file is None:
-        file = Path(__file__).resolve().parent / "tasks"
+        file = Path.home() / "TaskManager" / "tasks.txt"
     with open(file, "w") as file:
         for task in tasks:
             file.write(f"{task["id"]}|{task["title"]}|{task["completed"]}|{task["priority"]}\n")
@@ -113,7 +122,7 @@ def save_tasks(tasks,file=None):
 
 def load_tasks(file=None):
     if file is None:
-        file = Path(__file__).resolve().parent / "tasks"
+        file = Path.home() / "TaskManager" / "tasks.txt"
     tasks = []
     try:
         with open(file) as file:
